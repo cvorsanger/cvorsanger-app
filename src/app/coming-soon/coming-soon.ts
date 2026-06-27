@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { NgOptimizedImage, NgStyle } from '@angular/common'
 
 @Component({
@@ -8,7 +8,7 @@ import { NgOptimizedImage, NgStyle } from '@angular/common'
   templateUrl: './coming-soon.html',
   styleUrl: './coming-soon.scss'
 })
-export class ComingSoon {
+export class ComingSoon implements AfterViewInit {
   @ViewChild('bulldozer') movableElement!: ElementRef;
 
   hideBubble: boolean = true;
@@ -16,38 +16,44 @@ export class ComingSoon {
   taunt: string = "Catch me if you can!";
   bulldozerSize: number = 75;
 
+  private naturalLeft: number = 0;
+  private naturalTop: number = 0;
+
   ngOnInit(): void {
     setTimeout(() => {
       this.hideBubble = false;
     }, 2000);
   }
 
+  ngAfterViewInit(): void {
+    const rect = this.movableElement.nativeElement.getBoundingClientRect();
+    this.naturalLeft = rect.left;
+    this.naturalTop = rect.top;
+  }
+
   onMouseEnter(): void {
-    let rect = this.movableElement.nativeElement.getBoundingClientRect();
-    console.log(rect)
-    let left = Math.random();
-    let top =  Math.random();
-    console.log("Random Left", left, "Random Top", top)
-  
-    let maxX = window.innerWidth - rect.width;
-    let maxY = window.innerHeight - rect.height;
+    const rect = this.movableElement.nativeElement.getBoundingClientRect();
 
-    left = Math.floor(left*(maxX +1) - rect.left);
-    top = Math.floor(top*(maxY +1) - rect.top);
-    console.log("Pos Left", left, "Pos Top", top)
+    const buffer = 20;
+    const maxX = window.innerWidth - rect.width - buffer;
+    const maxY = window.innerHeight - rect.height - buffer;
 
-    // Apply a transformation to move the element
+    const targetX = Math.floor(Math.random() * (maxX - buffer + 1)) + buffer;
+    const targetY = Math.floor(Math.random() * (maxY - buffer + 1)) + buffer;
+
+    // Always compute relative to the stored natural position so mid-animation
+    // getBoundingClientRect() values can't corrupt the offset.
+    const tx = targetX - this.naturalLeft;
+    const ty = targetY - this.naturalTop;
+
     this.elementStyle = {
       position: 'relative',
-      //left: `${left}px`,
-      //top: `${top}px`,
-      transform: `translate(${left}px, ${top}px)`, // Example: move up by 20px
-      transition: 'transform 0.5s ease-in-out' // Smooth transition
+      transform: `translate(${tx}px, ${ty}px)`,
+      transition: 'transform 0.5s ease-in-out'
     };
   }
 
   onMouseOver(): void {
-    // Reset the transformation when the mouse leaves
     this.taunt = "Ahhh you caught me!!!!"
   }
 
