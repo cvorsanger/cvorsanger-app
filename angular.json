@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/cvorsanger-app",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -33,6 +34,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/cvorsanger-app/",
               "budgets": [
                 {
                   "type": "initial",
@@ -86,6 +88,9 @@
               "src/styles.scss"
             ]
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
