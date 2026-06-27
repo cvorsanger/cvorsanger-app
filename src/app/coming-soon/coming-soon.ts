@@ -11,10 +11,13 @@ import { NgOptimizedImage, NgStyle } from '@angular/common'
 export class ComingSoon implements AfterViewInit {
   @ViewChild('bulldozer') movableElement!: ElementRef;
 
+  constructor(private hostEl: ElementRef) {}
+
   hideBubble: boolean = true;
   elementStyle: any = {};
   taunt: string = "Catch me if you can!";
   bulldozerSize: number = 75;
+  buffer: number = 20;
 
   private naturalLeft: number = 0;
   private naturalTop: number = 0;
@@ -33,13 +36,15 @@ export class ComingSoon implements AfterViewInit {
 
   onMouseEnter(): void {
     const rect = this.movableElement.nativeElement.getBoundingClientRect();
+    const container = this.hostEl.nativeElement.getBoundingClientRect();
 
-    const buffer = 20;
-    const maxX = window.innerWidth - rect.width - buffer;
-    const maxY = window.innerHeight - rect.height - buffer;
+    const minX = container.left + this.buffer;
+    const minY = container.top + this.buffer;
+    const maxX = container.right - rect.width - this.buffer;
+    const maxY = container.bottom - rect.height - this.buffer;
 
-    const targetX = Math.floor(Math.random() * (maxX - buffer + 1)) + buffer;
-    const targetY = Math.floor(Math.random() * (maxY - buffer + 1)) + buffer;
+    const targetX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+    const targetY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
 
     // Always compute relative to the stored natural position so mid-animation
     // getBoundingClientRect() values can't corrupt the offset.
