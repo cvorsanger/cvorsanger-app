@@ -14,9 +14,11 @@ export class ComingSoon implements AfterViewInit {
 
   constructor(private cdr: ChangeDetectorRef) {}
 
+  isMobile = window.matchMedia('(pointer: coarse)').matches;
+
   hideBubble: boolean = true;
   elementStyle: any = {};
-  taunt: string = "Catch me if you can!";
+  taunt: string = 'Catch me if you can!';
   bulldozerSize: number = 75;
   buffer: number = 20;
 
@@ -62,13 +64,7 @@ export class ComingSoon implements AfterViewInit {
       transform: `translate(${tx}px, ${ty}px)`,
       transition: 'transform 0.5s ease-in-out'
     };
-  }
 
-  onMouseOver(): void {
-    this.taunt = "Ahhh you caught me!!!!"
-  }
-
-  onMouseLeave(): void {
-    this.taunt = "Got to be quicker than that"
+    this.taunt = this.isMobile ? 'Too slow!' : 'Got to be quicker than that'
   }
 }
