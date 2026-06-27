@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgOptimizedImage, NgStyle } from '@angular/common'
 
 @Component({
@@ -10,8 +10,9 @@ import { NgOptimizedImage, NgStyle } from '@angular/common'
 })
 export class ComingSoon implements AfterViewInit {
   @ViewChild('bulldozer') movableElement!: ElementRef;
+  @ViewChild('bulldozerArea') bulldozerAreaEl!: ElementRef;
 
-  constructor(private hostEl: ElementRef) {}
+  constructor(private cdr: ChangeDetectorRef) {}
 
   hideBubble: boolean = true;
   elementStyle: any = {};
@@ -25,6 +26,7 @@ export class ComingSoon implements AfterViewInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.hideBubble = false;
+      this.cdr.markForCheck();
     }, 2000);
   }
 
@@ -32,11 +34,15 @@ export class ComingSoon implements AfterViewInit {
     const rect = this.movableElement.nativeElement.getBoundingClientRect();
     this.naturalLeft = rect.left;
     this.naturalTop = rect.top;
+    setTimeout(() => {
+      this.elementStyle = { position: 'relative', transform: 'translate(0, 50px)' };
+      this.cdr.markForCheck();
+    }, 0);
   }
 
   onMouseEnter(): void {
     const rect = this.movableElement.nativeElement.getBoundingClientRect();
-    const container = this.hostEl.nativeElement.getBoundingClientRect();
+    const container = this.bulldozerAreaEl.nativeElement.getBoundingClientRect();
 
     const minX = container.left + this.buffer;
     const minY = container.top + this.buffer;

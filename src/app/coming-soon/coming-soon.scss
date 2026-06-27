@@ -1,3 +1,17 @@
+.bulldozer-area {
+  position: relative;
+}
+
+.centered-heading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+  margin: 0;
+}
+
 .speech-bubble {
   position: relative; /* Important for positioning the pseudo-element */
   background-color: #f0f0f0; /* Light gray background */

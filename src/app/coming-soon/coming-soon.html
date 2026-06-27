@@ -1,15 +1,16 @@
-<div class="d-flex flex-column justify-content-center">
-    <h1>COMING SOON</h1>
+<div class="bulldozer-area flex-grow-1 d-flex align-items-center justify-content-center w-100" #bulldozerArea>
+    <h1 class="centered-heading">COMING SOON</h1>
     <div #bulldozer [ngStyle]="elementStyle">
         <div class="speech-bubble" [hidden]="hideBubble">
             {{ taunt }}
-        </div>  
-         <img class="bulldozer"
+        </div>
+        <img class="bulldozer"
             ngSrc="assets/img/bulldozer.png"
-            [width]="bulldozerSize" 
+            [width]="bulldozerSize"
             [height]="bulldozerSize"
             (mouseenter)="onMouseEnter()"
             (mouseover)="onMouseOver()"
-            (mouseleave)="onMouseLeave()">
+            (mouseleave)="onMouseLeave()"
+            (touchstart)="onMouseEnter()">
     </div>
 </div>
